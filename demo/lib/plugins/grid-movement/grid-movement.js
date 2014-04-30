@@ -17,7 +17,7 @@ ig.module(
     ig.GridMovement = ig.Class.extend({
         tilesize: 8,
 
-        speed: 100,
+        speed: 40,
 
         entity: null,
         direction: 0,
@@ -30,18 +30,36 @@ ig.module(
         update: function() {
             if(this.destination === null) {
                 if(this.direction === 1) {
+                    this.entity.vel.y = -this.speed;
                     this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y - this.tilesize);
                 } else if(this.direction === 2) {
+                    this.entity.vel.y = this.speed;
                     this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y + this.tilesize);
                 } else if(this.direction === 3) {
+                    this.entity.vel.x = -this.speed;
                     this.destination = this.alignToGrid(this.entity.pos.x - this.tilesize, this.entity.pos.y);
                 } else if(this.direction === 4) {
+                    this.entity.vel.x = this.speed;
                     this.destination = this.alignToGrid(this.entity.pos.x + this.tilesize, this.entity.pos.y);
                 }
             } else {
-                console.log(this.destination);
-                this.destination = null;
-                this.direction = null;
+                if(
+                    (this.entity.pos.x <= this.destination.x && this.entity.last.x > this.destination.x) ||
+                    (this.entity.pos.x >= this.destination.x && this.entity.last.x < this.destination.x) ||
+                    (this.entity.pos.y <= this.destination.y && this.entity.last.y > this.destination.y) ||
+                    (this.entity.pos.y >= this.destination.y && this.entity.last.y < this.destination.y)
+                ) {
+                    this.entity.vel = {x: 0, y: 0};
+                    this.entity.pos = this.destination;
+                    this.destination = null;
+                    this.direction = 0;
+                }
+
+                if(this.entity.vel.x === 0 && this.entity.vel.y === 0) {
+                    this.entity.pos = this.alignToGrid(this.entity.pos.x, this.entity.pos.y);
+                    this.destination = null;
+                    this.direction = 0;
+                }
             }
         },
         
