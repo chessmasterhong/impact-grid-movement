@@ -17,27 +17,39 @@ ig.module(
     ig.GridMovement = ig.Class.extend({
         tilesize: 8,
 
+        speed: 100,
+
         entity: null,
         direction: 0,
+        destination: null,
 
         init: function(entity) {
             this.entity = entity;
         },
 
         update: function() {
-            if(this.direction === 1) {
-                this.entity.pos.y -= this.tilesize;
-                this.direction = 0;
-            } else if(this.direction === 2) {
-                this.entity.pos.y += this.tilesize;
-                this.direction = 0;
-            } else if(this.direction === 3) {
-                this.entity.pos.x -= this.tilesize;
-                this.direction = 0;
-            } else if(this.direction === 4) {
-                this.entity.pos.x += this.tilesize;
-                this.direction = 0;
+            if(this.destination === null) {
+                if(this.direction === 1) {
+                    this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y - this.tilesize);
+                } else if(this.direction === 2) {
+                    this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y + this.tilesize);
+                } else if(this.direction === 3) {
+                    this.destination = this.alignToGrid(this.entity.pos.x - this.tilesize, this.entity.pos.y);
+                } else if(this.direction === 4) {
+                    this.destination = this.alignToGrid(this.entity.pos.x + this.tilesize, this.entity.pos.y);
+                }
+            } else {
+                console.log(this.destination);
+                this.destination = null;
+                this.direction = null;
             }
+        },
+        
+        alignToGrid: function(pos_x, pos_y) {
+            return {
+                x: Math.floor(pos_x / this.tilesize) * this.tilesize,
+                y: Math.floor(pos_y / this.tilesize) * this.tilesize
+            };
         },
 
         /**
