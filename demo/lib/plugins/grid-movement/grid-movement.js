@@ -25,15 +25,37 @@ ig.module(
         },
 
         update: function() {
-            if(ig.input.pressed('up')) {
+            if(this.direction === 1) {
                 this.entity.pos.y -= this.tilesize;
-            } else if(ig.input.pressed('down')) {
+                this.direction = 0;
+            } else if(this.direction === 2) {
                 this.entity.pos.y += this.tilesize;
-            } else if(ig.input.pressed('left')) {
+                this.direction = 0;
+            } else if(this.direction === 3) {
                 this.entity.pos.x -= this.tilesize;
-            } else if(ig.input.pressed('right')) {
+                this.direction = 0;
+            } else if(this.direction === 4) {
                 this.entity.pos.x += this.tilesize;
+                this.direction = 0;
             }
+        },
+
+        /**
+         *  moveType abstracts the user input direction from the grid movement
+         *  logic, allowing arbitrary user key bindings.
+         *  +---+---+---+
+         *  |   | 1 |   |
+         *  +---+---+---+
+         *  | 3 | 0 | 4 |
+         *  +---+---+---+
+         *  |   | 2 |   |
+         *  +---+---+---+
+         */
+        moveType: {
+            'UP': 1,
+            'DOWN': 2,
+            'LEFT': 3,
+            'RIGHT': 4
         }
     });
 });

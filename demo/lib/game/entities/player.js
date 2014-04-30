@@ -23,6 +23,15 @@ ig.module(
         update: function() {
             this.parent();
 
+            if(ig.input.pressed('up'))
+                this.movement.direction = this.movement.moveType.UP;
+            if(ig.input.pressed('down'))
+                this.movement.direction = this.movement.moveType.DOWN;
+            if(ig.input.pressed('left'))
+                this.movement.direction = this.movement.moveType.LEFT;
+            if(ig.input.pressed('right'))
+                this.movement.direction = this.movement.moveType.RIGHT;
+
             this.movement.update();
         }
     });
