@@ -33,13 +33,19 @@ ig.module(
                 this.movement.direction = this.movement.moveType.RIGHT;
 
             if(ig.input.pressed('click')) {
-                if(ig.input.mouse.x < this.pos.x)
+                var delta = {
+                    x: this.pos.x + this.size.x / 2 - ig.input.mouse.x,
+                    y: this.pos.y + this.size.y / 2 - ig.input.mouse.y
+                };
+                var tolerance = 16;
+
+                if(delta.y > 0 && Math.abs(delta.x) <= tolerance)
                     this.movement.direction = this.movement.moveType.UP;
-                if(ig.input.mouse.x > this.pos.x)
+                else if(delta.y < 0 && Math.abs(delta.x) <= tolerance)
                     this.movement.direction = this.movement.moveType.DOWN;
-                if(ig.input.mouse.y < this.pos.y)
+                else if(delta.x > 0 && Math.abs(delta.y) <= tolerance)
                     this.movement.direction = this.movement.moveType.LEFT;
-                if(ig.input.mouse.y > this.pos.y)
+                else if(delta.x < 0 && Math.abs(delta.y) <= tolerance)
                     this.movement.direction = this.movement.moveType.RIGHT;
             }
 
