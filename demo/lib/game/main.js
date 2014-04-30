@@ -1,3 +1,9 @@
+/**
+ *  main.js
+ *  -----
+ */
+
+
 ig.module(
     'game.main'
 )

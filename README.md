@@ -1,6 +1,6 @@
 Impact Grid Movement Plugin
 ===
-A plugin for the ImpactJS game engine that enables grid movement for entities. Supports arbitrary keyboard-based and mouse-based user inputs.
+A plugin for the Impact game engine that enables grid movement for entities. Supports arbitrary keyboard-based and mouse-based user inputs.
 
 
 Usage
@@ -17,33 +17,33 @@ Usage
 
     a. For mouse support, in your entity's `update` method, add the following lines:
 
-    ```
-    if(ig.input.pressed('up'))
-        this.movement.direction = this.movement.moveType.UP;
-    else if(ig.input.pressed('down'))
-        this.movement.direction = this.movement.moveType.DOWN;
-    else if(ig.input.pressed('left'))
-        this.movement.direction = this.movement.moveType.LEFT;
-    else if(ig.input.pressed('right'))
-        this.movement.direction = this.movement.moveType.RIGHT;
-    ```
+        ```
+        if(ig.input.pressed('up'))
+            this.movement.direction = this.movement.moveType.UP;
+        else if(ig.input.pressed('down'))
+            this.movement.direction = this.movement.moveType.DOWN;
+        else if(ig.input.pressed('left'))
+            this.movement.direction = this.movement.moveType.LEFT;
+        else if(ig.input.pressed('right'))
+            this.movement.direction = this.movement.moveType.RIGHT;
+        ```
 
     ** *Be sure to bind the keyboard keys in your main game.*
 
     b. For mouse support, in your entity's `update` method, add the following lines:
 
-    ```
-    if(ig.input.pressed('click')) {
-        if(this.pos.y < ig.input.mouse.y)
-            this.movement.direction = this.movement.moveType.UP;
-        else if(this.pos.y > ig.input.mouse.y)
-            this.movement.direction = this.movement.moveType.DOWN;
-        else if(this.pos.x < ig.input.mouse.x)
-            this.movement.direction = this.movement.moveType.LEFT;
-        else if(this.pos.x > ig.input.mouse.x)
-            this.movement.direction = this.movement.moveType.RIGHT;
-    }
-    ```
+        ```
+        if(ig.input.pressed('click')) {
+            if(this.pos.y < ig.input.mouse.y)
+                this.movement.direction = this.movement.moveType.UP;
+            else if(this.pos.y > ig.input.mouse.y)
+                this.movement.direction = this.movement.moveType.DOWN;
+            else if(this.pos.x < ig.input.mouse.x)
+                this.movement.direction = this.movement.moveType.LEFT;
+            else if(this.pos.x > ig.input.mouse.x)
+                this.movement.direction = this.movement.moveType.RIGHT;
+        }
+        ```
 
     ** *Be sure to bind the mouse button(s) in your main game.*
 

@@ -1,4 +1,6 @@
 /**
+ *  grid-movement.js
+ *  -----
  *  Impact Grid Movement Plugin
  *  https://github.com/chessmasterhong/impact-grid-movement
  *

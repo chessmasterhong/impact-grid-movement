@@ -1,3 +1,9 @@
+/**
+ *  player.js
+ *  -----
+ */
+
+
 ig.module(
     'game.entities.player'
 )
