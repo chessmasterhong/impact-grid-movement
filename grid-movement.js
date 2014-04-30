@@ -6,7 +6,7 @@
  */
 
 ig.module(
-    'plugins.grid-movement.grid-movement'
+    'plugins.grid-movement'
 )
 .requires(
     'impact.impact'

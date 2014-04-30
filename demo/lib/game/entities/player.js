@@ -3,7 +3,9 @@ ig.module(
 )
 .requires(
     'impact.entity',
-    'plugins.grid-movement.grid-movement'
+
+    // Add the grid movement plugin to the .requires for all entities that need grid movement
+    'plugins.grid-movement'
 )
 .defines(function() {
     EntityPlayer = ig.Entity.extend({
