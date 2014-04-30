@@ -9,7 +9,7 @@ Usage
 2. Add the line `plugins.grid-movement` in the `.requires` section for the entity that you want to apply grid movement to.
 3. To initialize the grid movement plugin: in your entity's `init` method, add the following line:
 
-    ```
+    ``` javascript
     this.movement = new ig.GridMovement(this);
     ```
 
@@ -17,7 +17,7 @@ Usage
 
     a. For mouse support, in your entity's `update` method, add the following lines:
 
-        ```
+        ``` javascript
         if(ig.input.pressed('up'))
             this.movement.direction = this.movement.moveType.UP;
         else if(ig.input.pressed('down'))
@@ -32,7 +32,7 @@ Usage
 
     b. For mouse support, in your entity's `update` method, add the following lines:
 
-        ```
+        ``` javascript
         if(ig.input.pressed('click')) {
             if(this.pos.y < ig.input.mouse.y)
                 this.movement.direction = this.movement.moveType.UP;
@@ -49,7 +49,7 @@ Usage
 
 5. Lastly, in your entity's `update` method (after the code above), add the following line:
 
-    ```
+    ``` javascript
     this.movement.update();
     ```
 
