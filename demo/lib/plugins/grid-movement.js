@@ -3,7 +3,11 @@
  *  https://github.com/chessmasterhong/impact-grid-movement
  *
  *  Kevin Chan (chessmasterhong)
+ *
+ *  A plugin for the ImpactJS game engine that enables grid movement for
+ *  entities. Supports arbitrary keyboard-based and mouse-based user inputs.
  */
+
 
 ig.module(
     'plugins.grid-movement'

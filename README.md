@@ -46,5 +46,10 @@ if(ig.input.pressed('click')) {
 
 *Be sure to bind the mouse button(s) in your main game.*
 
+6. Lastly, in your entity's `update` method (after the code above), add the following line:
+
+```
+this.movement.update();
+```
 
 This sets up your game for basic grid movement. There are improved implementations for this; see the demo's source code for more information.
