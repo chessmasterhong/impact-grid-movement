@@ -32,6 +32,17 @@ ig.module(
             if(ig.input.pressed('right'))
                 this.movement.direction = this.movement.moveType.RIGHT;
 
+            if(ig.input.pressed('click')) {
+                if(ig.input.mouse.x < this.pos.x)
+                    this.movement.direction = this.movement.moveType.UP;
+                if(ig.input.mouse.x > this.pos.x)
+                    this.movement.direction = this.movement.moveType.DOWN;
+                if(ig.input.mouse.y < this.pos.y)
+                    this.movement.direction = this.movement.moveType.LEFT;
+                if(ig.input.mouse.y > this.pos.y)
+                    this.movement.direction = this.movement.moveType.RIGHT;
+            }
+
             this.movement.update();
         }
     });
