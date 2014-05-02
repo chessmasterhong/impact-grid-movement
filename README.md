@@ -17,7 +17,6 @@ Usage
 
     a. For mouse support, in your entity's `update` method, add the following lines:
 
-        ```
         if(this.movement.destination === null) {
             if(ig.input.pressed('up'))
                 this.movement.direction = this.movement.moveType.UP;
@@ -28,13 +27,11 @@ Usage
             else if(ig.input.pressed('right'))
                 this.movement.direction = this.movement.moveType.RIGHT;
         }
-        ```
 
     ** *Be sure to bind the keyboard keys in your main game.*
 
     b. For mouse support, in your entity's `update` method, add the following lines:
 
-        ```
         if(this.movement.destination === null) {
             if(ig.input.pressed('click')) {
                 if(this.pos.y < ig.input.mouse.y)
@@ -47,7 +44,6 @@ Usage
                     this.movement.direction = this.movement.moveType.RIGHT;
             }
         }
-        ```
 
     ** *Be sure to bind the mouse button(s) in your main game.*
 
