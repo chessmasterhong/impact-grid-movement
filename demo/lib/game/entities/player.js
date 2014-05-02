@@ -30,43 +30,46 @@ ig.module(
         update: function() {
             this.parent();
 
-            // Keyboard-based grid movement
-            // Check if appropriate movement key is pressed
-            if(ig.input.pressed('up'))
-                this.movement.direction = this.movement.moveType.UP;
-            else if(ig.input.pressed('down'))
-                this.movement.direction = this.movement.moveType.DOWN;
-            else if(ig.input.pressed('left'))
-                this.movement.direction = this.movement.moveType.LEFT;
-            else if(ig.input.pressed('right'))
-                this.movement.direction = this.movement.moveType.RIGHT;
-
-            // Mouse-based grid movement
-            if(ig.input.pressed('click')) {
-                // The delta and tolerance are optional. It just helps to reduce the
-                //   click range/angles so that the mouse click conditions do not
-                //   overlap and conflict with each other.
-
-                // Get the center of this entity and compare the center position
-                //   relative to the mouse position
-                var delta = {
-                    x: this.pos.x + this.size.x / 2 - ig.input.mouse.x,
-                    y: this.pos.y + this.size.y / 2 - ig.input.mouse.y
-                };
-
-                // Set the tolerance in pixels
-                var tolerance = 16;
-
-                // Check the mouse position relative to this entity's center position.
-                //   Also check if mouse position is within tolerance range.
-                if(delta.y > 0 && Math.abs(delta.x) <= tolerance)
+            // Check for user input only if entity has no destination to go to
+            if(this.movement.destination === null) {
+                // Keyboard-based grid movement
+                // Check if appropriate movement key is pressed
+                if(ig.input.state('up'))
                     this.movement.direction = this.movement.moveType.UP;
-                else if(delta.y < 0 && Math.abs(delta.x) <= tolerance)
+                else if(ig.input.state('down'))
                     this.movement.direction = this.movement.moveType.DOWN;
-                else if(delta.x > 0 && Math.abs(delta.y) <= tolerance)
+                else if(ig.input.state('left'))
                     this.movement.direction = this.movement.moveType.LEFT;
-                else if(delta.x < 0 && Math.abs(delta.y) <= tolerance)
+                else if(ig.input.state('right'))
                     this.movement.direction = this.movement.moveType.RIGHT;
+
+                // Mouse-based grid movement
+                if(ig.input.state('click')) {
+                    // The delta and tolerance are optional. It just helps to reduce the
+                    //   click range/angles so that the mouse click conditions do not
+                    //   overlap and conflict with each other.
+
+                    // Get the center of this entity and compare the center position
+                    //   relative to the mouse position
+                    var delta = {
+                        x: this.pos.x + this.size.x / 2 - ig.input.mouse.x,
+                        y: this.pos.y + this.size.y / 2 - ig.input.mouse.y
+                    };
+
+                    // Set the tolerance in pixels
+                    var tolerance = 16;
+
+                    // Check the mouse position relative to this entity's center position.
+                    //   Also check if mouse position is within tolerance range.
+                    if(delta.y > 0 && Math.abs(delta.x) <= tolerance)
+                        this.movement.direction = this.movement.moveType.UP;
+                    else if(delta.y < 0 && Math.abs(delta.x) <= tolerance)
+                        this.movement.direction = this.movement.moveType.DOWN;
+                    else if(delta.x > 0 && Math.abs(delta.y) <= tolerance)
+                        this.movement.direction = this.movement.moveType.LEFT;
+                    else if(delta.x < 0 && Math.abs(delta.y) <= tolerance)
+                        this.movement.direction = this.movement.moveType.RIGHT;
+                }
             }
 
             // Run grid movement plugin's update method
