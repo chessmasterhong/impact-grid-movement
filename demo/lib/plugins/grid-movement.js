@@ -6,91 +6,107 @@
  *
  *  Kevin Chan (chessmasterhong)
  *
- *  A plugin for the ImpactJS game engine that enables grid movement for
- *  entities. Supports arbitrary keyboard-based and mouse-based user inputs.
+ *  A plugin for the ImpactJS game engine that enables grid-based movement for
+ *  entities.
+ *
+ *  Features:
+ *      - Arbitrary user-defined keyboard inputs
+ *      - Support for mouse-based user input
+ *      - Continuous movement
+ *      - Map edge auto-detection
  */
 
 
 ig.module(
-    'plugins.grid-movement'
+    'plugins.grid-movement.grid-movement'
 )
 .requires(
-    'impact.impact'
+    'impact.impact',
+    'impact.map'
 )
 .defines(function() {
     "use strict";
 
     ig.GridMovement = ig.Class.extend({
-        // The grid or tile size the entity should align itself on to
-        tilesize: 8,
+        speed: 100,
 
-        // The speed in which the entity should move at (to another tile)
-        speed: 40,
-
-        entity: null,
         direction: null,
         destination: null,
 
         init: function(entity) {
-            // Set this.entity with the entity to apply grid movement to
             this.entity = entity;
+            this.tilesize = ig.tilesize;
+            this.mapsize = {
+                x: ig.game.collisionMap.width * this.tilesize,
+                y: ig.game.collisionMap.height * this.tilesize
+            };
         },
 
         update: function() {
-            // If a destination has not been determined yet
+            // Destination not determined yet
             if(this.destination === null) {
-                // Get the direction from the user input. Set the appropriate
-                //   destination and start moving the entity in the specified direction
-                /*
-                 *        -vel.y
-                 *           |
-                 * -vel.x -- X -- +vel.x
-                 *           |
-                 *        +vel.y
-                 */
+                // Get direction from user input
                 if(this.direction === 0) {
+                    // Start moving entity in specified direction
                     this.entity.vel.y = -this.speed;
+
+                    // Set appropriate destination
                     this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y - this.tilesize);
                 } else if(this.direction === 1) {
+                    // Start moving entity in specified direction
                     this.entity.vel.y = this.speed;
+
+                    // Set appropriate destination
                     this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y + this.tilesize);
                 } else if(this.direction === 2) {
+                    // Start moving entity in specified direction
                     this.entity.vel.x = -this.speed;
+
+                    // Set appropriate destination
                     this.destination = this.alignToGrid(this.entity.pos.x - this.tilesize, this.entity.pos.y);
                 } else if(this.direction === 3) {
+                    // Start moving entity in specified direction
                     this.entity.vel.x = this.speed;
+
+                    // Set appropriate destination
                     this.destination = this.alignToGrid(this.entity.pos.x + this.tilesize, this.entity.pos.y);
                 }
 
-                // Once we have our destination, reset the direction back to default
+                // Reset direction back to default
                 this.direction = null;
 
-            // A destination has been set
+            // Destination set
             } else {
-                // Wait until the entity has reached or exceeded the destination tile
+                // Stop entity when colliding with collision tiles
+                // Prevent entity from running off map edge
                 if(
+                    (this.entity.vel.x === 0 && this.entity.vel.y === 0) ||
+                    (this.entity.pos.x < 0 || this.entity.pos.x > this.mapsize.width ||
+                     this.entity.pos.y < 0 || this.entity.pos.y > this.mapsize.height)
+                ) {
+                    // Stop entity's movement
+                    this.entity.vel = {x: 0, y: 0};
+
+                    // Align entity's position to destination
+                    this.entity.pos = this.alignToGrid(this.entity.pos.x + this.entity.size.x / 2, this.entity.pos.y + this.entity.size.y / 2);
+
+                    // Reset destination (wait for next user input)
+                    this.destination = null;
+
+                // Wait until entity has reached or moved past destination tile
+                } else if(
                     (this.entity.pos.x <= this.destination.x && this.entity.last.x > this.destination.x) ||
                     (this.entity.pos.x >= this.destination.x && this.entity.last.x < this.destination.x) ||
                     (this.entity.pos.y <= this.destination.y && this.entity.last.y > this.destination.y) ||
                     (this.entity.pos.y >= this.destination.y && this.entity.last.y < this.destination.y)
                 ) {
-                    // Stop the entity's movement
+                    // Stop entity's movement
                     this.entity.vel = {x: 0, y: 0};
 
-                    // Align the entity's position to the destination
+                    // Align entity's position to destination
                     this.entity.pos = this.destination;
 
-                    // Reset the destination (wait for next user input)
-                    this.destination = null;
-                }
-
-                // Fix for condition when entity collides with collision tiles
-                // By default, after entity collides, entity stops moving
-                if(this.entity.vel.x === 0 && this.entity.vel.y === 0) {
-                    // Realign the entity's position back to the grid (in case it has been knocked off grid alignment)
-                    this.entity.pos = this.alignToGrid(this.entity.pos.x, this.entity.pos.y);
-
-                    // Reset the destination (wait for next user input)
+                    // Reset destination (wait for next user input)
                     this.destination = null;
                 }
             }
@@ -127,7 +143,7 @@ ig.module(
         },
 
         /**
-         *  moveType
+         *  moveDir
          *  -----
          *  Abstracts the user input direction from the grid movement
          *  logic, allowing arbitrary user key bindings.
@@ -140,10 +156,10 @@ ig.module(
          *  |   | 1 |   |
          *  +---+---+---+
          */
-        moveType: {
-            'UP': 0,
-            'DOWN': 1,
-            'LEFT': 2,
+        moveDir: {
+            'UP'   : 0,
+            'DOWN' : 1,
+            'LEFT' : 2,
             'RIGHT': 3
         }
     });
