@@ -21,20 +21,21 @@ ig.module(
     'plugins.grid-movement.grid-movement'
 )
 .requires(
-    'impact.impact',
+    'impact.entity',
     'impact.map'
 )
 .defines(function() {
     "use strict";
 
-    ig.GridMovement = ig.Class.extend({
+    ig.Entity.inject({
         speed: 100,
 
         direction: null,
         destination: null,
 
-        init: function(entity) {
-            this.entity = entity;
+        init: function(x, y, settings) {
+            this.parent(x, y, settings);
+
             this.tilesize = ig.tilesize;
             this.mapsize = {
                 x: ig.game.collisionMap.width * this.tilesize,
@@ -43,33 +44,44 @@ ig.module(
         },
 
         update: function() {
+            this.parent();
+
             // Destination not determined yet
             if(this.destination === null) {
                 // Get direction from user input
+                if(ig.input.state('up'))
+                    this.direction = this.moveDir.UP;
+                else if(ig.input.state('down'))
+                    this.direction = this.moveDir.DOWN;
+                else if(ig.input.state('left'))
+                    this.direction = this.moveDir.LEFT;
+                else if(ig.input.state('right'))
+                    this.direction = this.moveDir.RIGHT;
+
                 if(this.direction === 0) {
                     // Start moving entity in specified direction
-                    this.entity.vel.y = -this.speed;
+                    this.vel.y = -this.speed;
 
                     // Set appropriate destination
-                    this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y - this.tilesize);
+                    this.destination = this.alignToGrid(this.pos.x, this.pos.y - this.tilesize);
                 } else if(this.direction === 1) {
                     // Start moving entity in specified direction
-                    this.entity.vel.y = this.speed;
+                    this.vel.y = this.speed;
 
                     // Set appropriate destination
-                    this.destination = this.alignToGrid(this.entity.pos.x, this.entity.pos.y + this.tilesize);
+                    this.destination = this.alignToGrid(this.pos.x, this.pos.y + this.tilesize);
                 } else if(this.direction === 2) {
                     // Start moving entity in specified direction
-                    this.entity.vel.x = -this.speed;
+                    this.vel.x = -this.speed;
 
                     // Set appropriate destination
-                    this.destination = this.alignToGrid(this.entity.pos.x - this.tilesize, this.entity.pos.y);
+                    this.destination = this.alignToGrid(this.pos.x - this.tilesize, this.pos.y);
                 } else if(this.direction === 3) {
                     // Start moving entity in specified direction
-                    this.entity.vel.x = this.speed;
+                    this.vel.x = this.speed;
 
                     // Set appropriate destination
-                    this.destination = this.alignToGrid(this.entity.pos.x + this.tilesize, this.entity.pos.y);
+                    this.destination = this.alignToGrid(this.pos.x + this.tilesize, this.pos.y);
                 }
 
                 // Reset direction back to default
@@ -80,31 +92,31 @@ ig.module(
                 // Stop entity when colliding with collision tiles
                 // Prevent entity from running off map edge
                 if(
-                    (this.entity.vel.x === 0 && this.entity.vel.y === 0) ||
-                    (this.entity.pos.x < 0 || this.entity.pos.x > this.mapsize.width ||
-                     this.entity.pos.y < 0 || this.entity.pos.y > this.mapsize.height)
+                    (this.vel.x === 0 && this.vel.y === 0) ||
+                    (this.pos.x < 0 || this.pos.x > this.mapsize.x ||
+                     this.pos.y < 0 || this.pos.y > this.mapsize.y)
                 ) {
                     // Stop entity's movement
-                    this.entity.vel = {x: 0, y: 0};
+                    this.vel = {x: 0, y: 0};
 
                     // Align entity's position to destination
-                    this.entity.pos = this.alignToGrid(this.entity.pos.x + this.entity.size.x / 2, this.entity.pos.y + this.entity.size.y / 2);
+                    this.pos = this.alignToGrid(this.pos.x + this.size.x / 2, this.pos.y + this.size.y / 2);
 
                     // Reset destination (wait for next user input)
                     this.destination = null;
 
                 // Wait until entity has reached or moved past destination tile
                 } else if(
-                    (this.entity.pos.x <= this.destination.x && this.entity.last.x > this.destination.x) ||
-                    (this.entity.pos.x >= this.destination.x && this.entity.last.x < this.destination.x) ||
-                    (this.entity.pos.y <= this.destination.y && this.entity.last.y > this.destination.y) ||
-                    (this.entity.pos.y >= this.destination.y && this.entity.last.y < this.destination.y)
+                    (this.pos.x <= this.destination.x && this.last.x > this.destination.x) ||
+                    (this.pos.x >= this.destination.x && this.last.x < this.destination.x) ||
+                    (this.pos.y <= this.destination.y && this.last.y > this.destination.y) ||
+                    (this.pos.y >= this.destination.y && this.last.y < this.destination.y)
                 ) {
                     // Stop entity's movement
-                    this.entity.vel = {x: 0, y: 0};
+                    this.vel = {x: 0, y: 0};
 
                     // Align entity's position to destination
-                    this.entity.pos = this.destination;
+                    this.pos = this.destination;
 
                     // Reset destination (wait for next user input)
                     this.destination = null;
