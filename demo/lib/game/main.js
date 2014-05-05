@@ -10,7 +10,8 @@ ig.module(
 .requires(
     'impact.game',
     'game.levels.demo',
-    'game.entities.player'
+    'game.entities.player',
+    'plugins.grid-movement'
 )
 .defines(function() {
     var MainGame = ig.Game.extend({
