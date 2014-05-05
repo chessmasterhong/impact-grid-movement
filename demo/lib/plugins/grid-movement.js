@@ -102,43 +102,6 @@ ig.module(
 
             // Destination not determined yet
             if(this.destination === null) {
-                // Get direction from user input
-                if(ig.input.state('up'))
-                    this.direction = this.moveDir.UP;
-                else if(ig.input.state('down'))
-                    this.direction = this.moveDir.DOWN;
-                else if(ig.input.state('left'))
-                    this.direction = this.moveDir.LEFT;
-                else if(ig.input.state('right'))
-                    this.direction = this.moveDir.RIGHT;
-
-                if(ig.input.state('click')) {
-                    // The delta and tolerance are optional. It just helps to reduce the
-                    //   click range/angles so that the mouse click conditions do not
-                    //   overlap and conflict with each other.
-
-                    // Get the center of this entity and compare the center position
-                    //   relative to the mouse position
-                    var delta = {
-                        x: this.pos.x + this.size.x / 2 - ig.input.mouse.x,
-                        y: this.pos.y + this.size.y / 2 - ig.input.mouse.y
-                    };
-
-                    // Set the tolerance in pixels
-                    var tolerance = 16;
-
-                    // Check the mouse position relative to this entity's center position.
-                    //   Also check if mouse position is within tolerance range.
-                    if(delta.y > 0 && Math.abs(delta.x) <= tolerance)
-                        this.direction = this.moveDir.UP;
-                    else if(delta.y < 0 && Math.abs(delta.x) <= tolerance)
-                        this.direction = this.moveDir.DOWN;
-                    else if(delta.x > 0 && Math.abs(delta.y) <= tolerance)
-                        this.direction = this.moveDir.LEFT;
-                    else if(delta.x < 0 && Math.abs(delta.y) <= tolerance)
-                        this.direction = this.moveDir.RIGHT;
-                }
-
                 if(this.direction === 0) {
                     // Start moving entity in specified direction
                     this.vel.y = -this.speed;
@@ -252,27 +215,66 @@ ig.module(
         },
 
         /**
-         *  object alignToGrid(number pos_x, number pos_y)
+         *  gridMovementBindKeys(keyUp, keyDown, keyLeft, keyRight)
+         *  -----
+         *  Enables keyboard-based entity movement.
+         */
+        gridMovementBindKeys: function(keyUp, keyDown, keyLeft, keyRight) {
+            // Destination not determined yet
+            if(this.destination === null) {
+                if(ig.input.state(keyUp))
+                    this.direction = this.moveDir.UP;
+                else if(ig.input.state(keyDown))
+                    this.direction = this.moveDir.DOWN;
+                else if(ig.input.state(keyLeft))
+                    this.direction = this.moveDir.LEFT;
+                else if(ig.input.state(keyRight))
+                    this.direction = this.moveDir.RIGHT;
+            }
+        },
+
+        /**
+         *  gridMovementBindMouse(key, tolerance)
+         *  -----
+         *  Enables mouse-based entity movement.
+         */
+        gridMovementBindMouse: function(key, tolerance) {
+            // Destination not determined yet
+            if(this.destination === null) {
+                if(ig.input.state(key)) {
+                    // The delta and tolerance are optional. It just helps to reduce the
+                    //   click range/angles so that the mouse click conditions do not
+                    //   overlap and conflict with each other.
+
+                    // Get the center of this entity and compare the center position
+                    //   relative to the mouse position
+                    var delta = {
+                        x: this.pos.x + this.size.x / 2 - ig.input.mouse.x,
+                        y: this.pos.y + this.size.y / 2 - ig.input.mouse.y
+                    };
+
+                    // Set the tolerance in pixels; defaults to tilesize if not explicitly set
+                    tolerance = typeof tolerance !== 'undefined' ? tolerance : this.tilesize / 2;
+
+                    // Check the mouse position relative to this entity's center position.
+                    //   Also check if mouse position is within tolerance range.
+                    if(delta.y > 0 && Math.abs(delta.x) <= tolerance)
+                        this.direction = this.moveDir.UP;
+                    else if(delta.y < 0 && Math.abs(delta.x) <= tolerance)
+                        this.direction = this.moveDir.DOWN;
+                    else if(delta.x > 0 && Math.abs(delta.y) <= tolerance)
+                        this.direction = this.moveDir.LEFT;
+                    else if(delta.x < 0 && Math.abs(delta.y) <= tolerance)
+                        this.direction = this.moveDir.RIGHT;
+                }
+            }
+        },
+
+        /**
+         *  alignToGrid(pos_x, pos_y)
          *  -----
          *  Aligns the provided coordinates to the nearest grid tile. Used to reposition
          *  entities back to grid in case they get knocked off of grid alignment.
-         *
-         *  Precondition:
-         *      pos_x: The current x-coordinate of the entity.
-         *      pos_y: The current y-coordinate of the entity.
-         *
-         *  Postcondition:
-         *      Returns an object of 2 properties {x: pos_x_aligned, y: pos_y_aligned},
-         *      such that pos_x_aligned and pos_y_aligned represents the aligned
-         *      coordinates, respectively. If the entity or object uses the coordinates
-         *      provided in the return value, it should align itself to the map rounded
-         *      to the nearest multiple of this.tilesize.
-         *
-         *  Example:
-         *      this.tilesize = 32;
-         *      this.pos = {x: 36.59, y: 74.02}
-         *      this.pos = this.alignToGrid(this.pos.x, this.pos.y);
-         *      console.log(this.pos); // {x: 32, y: 72}
          */
         alignToGrid: function(pos_x, pos_y) {
             return {

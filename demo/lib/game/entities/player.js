@@ -19,6 +19,14 @@ ig.module(
         init: function(x, y, settings) {
             this.parent(x, y, settings);
             this.addAnim('idle', 1, [0]);
+        },
+
+        update: function() {
+            this.parent();
+
+            // Get direction from user input
+            this.gridMovementBindKeys('up', 'down', 'left', 'right');
+            this.gridMovementBindMouse('click');
         }
     });
 });
