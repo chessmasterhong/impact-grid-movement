@@ -8,13 +8,6 @@
  *
  *  A plugin for the ImpactJS game engine that enables grid-based movement for
  *  entities.
- *
- *  Features:
- *      - Arbitrary user-defined keyboard inputs
- *      - Support for mouse-based user input
- *      - Continuous movement
- *      - Map edge auto-detection
- *      - Togglable grid display mode
  */
 
 
@@ -33,7 +26,7 @@ ig.module(
             enable: false,
 
             // Set true to display map tile grids. Default: false.
-            showGrid: true
+            showGrid: false
         },
 
         config: {
@@ -42,7 +35,7 @@ ig.module(
             // # = 1 : backgroundMap[1]
             // # = 2 : backgroundMap[2]
             // ...
-            mapType: 0,
+            mapType: 0
         },
 
         tilesize: 8,

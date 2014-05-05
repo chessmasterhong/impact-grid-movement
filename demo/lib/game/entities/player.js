@@ -26,7 +26,7 @@ ig.module(
 
             // Get direction from user input
             this.gridMovementBindKeys('up', 'down', 'left', 'right');
-            this.gridMovementBindMouse('click');
+            this.gridMovementBindMouse('click', 16);
         }
     });
 });

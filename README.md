@@ -1,58 +1,44 @@
 Impact Grid Movement Plugin
 ===
-A plugin for the Impact game engine that enables grid movement for entities. Supports arbitrary keyboard-based and mouse-based user inputs.
+A plugin for the Impact game engine that enables grid movement for entities.
 
 
-Usage
+Features
+---
+* Arbitrary user-defined keyboard inputs
+* Support for mouse-based user input
+* Continuous movement
+* Post-collision realignment
+* Map edge auto-detection
+* Togglable grid display mode
+
+
+Basic Usage
 ---
 1. Download `grid-movement.js` into your project's plugin directory (for example: `lib/plugins/grid-movement.js`).
-2. Add the line `plugins.grid-movement` in the `.requires` section for the entity that you want to apply grid movement to.
-3. To initialize grid movement, in your entity's `init` method, add the following line:
+2. To initialize grid movement, add the line `plugins.grid-movement` in the `.requires` section of your main game (for example: `lib/game/main.js`).
+3. For the entity to respond to the user's input, do either or both of the following (depending on your game):
 
-    ```
-    this.movement = new ig.GridMovement(this);
-    ```
+  a. For keyboard support, add `this.gridMovementBindKeys('up', 'down', 'left', 'right');` in your entity's `update` method.
 
-4. For the entity to respond to the user's input:
+    * The `'up'`, `'down'`, `'left'`, and `'right'` arguments can be changed to fit your game.
 
-    a. For mouse support, in your entity's `update` method, add the following lines:
+    * Be sure to bind the keyboard keys in your main game.
 
-        if(this.movement.destination === null) {
-            if(ig.input.pressed('up'))
-                this.movement.direction = this.movement.moveType.UP;
-            else if(ig.input.pressed('down'))
-                this.movement.direction = this.movement.moveType.DOWN;
-            else if(ig.input.pressed('left'))
-                this.movement.direction = this.movement.moveType.LEFT;
-            else if(ig.input.pressed('right'))
-                this.movement.direction = this.movement.moveType.RIGHT;
-        }
+  b. For mouse support add `this.gridMovementBindMouse('click');` in your entity's `update` method.
 
-    ** *Be sure to bind the keyboard keys in your main game.*
+    * The `'click'` can be changed to fit your game.
 
-    b. For mouse support, in your entity's `update` method, add the following lines:
+    * An optional argument (click distance tolerance) can be added to gridMovementBindMouse. Defaults to tile size if not specified.
 
-        if(this.movement.destination === null) {
-            if(ig.input.pressed('click')) {
-                if(this.pos.y < ig.input.mouse.y)
-                    this.movement.direction = this.movement.moveType.UP;
-                else if(this.pos.y > ig.input.mouse.y)
-                    this.movement.direction = this.movement.moveType.DOWN;
-                else if(this.pos.x < ig.input.mouse.x)
-                    this.movement.direction = this.movement.moveType.LEFT;
-                else if(this.pos.x > ig.input.mouse.x)
-                    this.movement.direction = this.movement.moveType.RIGHT;
-            }
-        }
+    * Be sure to bind the mouse button in your main game.
 
-    ** *Be sure to bind the mouse button(s) in your main game.*
+4. Repeat step 3 for each entity you want to apply grid movement to.
+5. This sets up your game for basic grid movement. Enjoy!
 
-5. Lastly, in your entity's `update` method (after the code above), add the following line:
+For an example or more information, see the included demo's source code.
 
-    ```
-    this.movement.update();
-    ```
 
-6. Repeat steps 2 to 5 for each entity you want to apply grid movement to.
-
-This sets up your game for basic grid movement. There are improved implementations for this; see the demo's source code for more information.
+Configuration
+---
+TODO
