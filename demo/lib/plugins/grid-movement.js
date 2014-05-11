@@ -6,8 +6,7 @@
  *
  *  Kevin Chan (chessmasterhong)
  *
- *  A plugin for the ImpactJS game engine that enables grid-based movement for
- *  entities.
+ *  A plugin for the Impact game engine that enables grid-based movement for entities.
  */
 
 
@@ -24,14 +23,6 @@ ig.module(
         // Seperate grid movement plugin properties from the rest of the entity
         //   (to prevent properties from accidentally being overwritten)
         gridMovement: {
-            debug: {
-                // Set true to enable console logs from grid-movement. Default: false.
-                enable: false,
-
-                // Set true to display map tile grids. Default: false.
-                showGrid: false
-            },
-
             // # < 0 : collisionMap
             // # = 0 : backgroundMap[0] (default)
             // # = 1 : backgroundMap[1]
@@ -57,7 +48,7 @@ ig.module(
             // +---+---+---+
             direction: null,
 
-            destination: null,
+            destination: null
         },
 
         update: function() {
@@ -78,11 +69,6 @@ ig.module(
                         x: ig.game.collisionMap.width * this.gridMovement.tilesize,
                         y: ig.game.collisionMap.height * this.gridMovement.tilesize
                     };
-
-                    if(this.gridMovement.debug.enable) {
-                        console.log('collisionMap found. Setting mapsize using collision map.');
-                        console.log('mapsize: { x: ' + this.gridMovement.mapsize.x + ', y: ' + this.gridMovement.mapsize.y + ' }');
-                    }
                 // Otherwise, if config is set to use background map and the
                 //   map has a background map of index mapType, use background
                 //   map of index mapType to define mapsize
@@ -94,11 +80,6 @@ ig.module(
                         x: ig.game.backgroundMaps[this.gridMovement.mapType].width * this.gridMovement.tilesize,
                         y: ig.game.backgroundMaps[this.gridMovement.mapType].height * this.gridMovement.tilesize
                     };
-
-                    if(this.gridMovement.debug.enable) {
-                        console.log('backgroundMap[' + this.gridMovement.mapType + '] found. Setting mapsize using background map ' + this.gridMovement.mapType + '.');
-                        console.log('mapsize: { x: ' + this.gridMovement.mapsize.x + ', y: ' + this.gridMovement.mapsize.y + ' }');
-                    }
                 // Fallback: No collision map or background map of index
                 //   mapType was found. Set dummy mapsize to prevent
                 //   if-statement from constantly running and updating mapsize
@@ -172,53 +153,6 @@ ig.module(
 
                     // Reset destination (wait for next user input)
                     this.gridMovement.destination = null;
-                }
-            }
-        },
-
-        draw: function() {
-            this.parent();
-
-            if(this.gridMovement.debug.showGrid && typeof this.gridMovement.mapsize !== 'undefined') {
-                ig.system.context.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-                ig.system.context.lineWidth = 1;
-
-                // Draw vertical lines spanning map width
-                for(var x = 0; x <= this.gridMovement.mapsize.x; x += this.gridMovement.tilesize) {
-                    ig.system.context.beginPath();
-                        // From horizontal top
-                        ig.system.context.moveTo(
-                            ig.system.getDrawPos(x + 0.5),
-                            ig.system.getDrawPos(0)
-                        );
-
-                        // To horizontal bottom
-                        ig.system.context.lineTo(
-                            ig.system.getDrawPos(x + 0.5),
-                            ig.system.getDrawPos(this.gridMovement.mapsize.y)
-                        );
-
-                        ig.system.context.stroke();
-                    ig.system.context.closePath();
-                }
-
-                // Draw horizontal lines spanning map height
-                for(var y = 0; y <= this.gridMovement.mapsize.y; y += this.gridMovement.tilesize) {
-                    ig.system.context.beginPath();
-                        // From vertical top
-                        ig.system.context.moveTo(
-                            ig.system.getDrawPos(0),
-                            ig.system.getDrawPos(y + 0.5)
-                        );
-
-                        // To vertical bottom
-                        ig.system.context.lineTo(
-                            ig.system.getDrawPos(this.gridMovement.mapsize.x + 0.5),
-                            ig.system.getDrawPos(y + 0.5)
-                        );
-
-                        ig.system.context.stroke();
-                    ig.system.context.closePath();
                 }
             }
         },

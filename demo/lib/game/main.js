@@ -9,9 +9,11 @@ ig.module(
 )
 .requires(
     'impact.game',
+    'impact.debug.debug', // Impact debug menu (You must have this to add grid movement debug menu)
     'game.levels.demo',
     'game.entities.player',
-    'plugins.grid-movement'
+    'plugins.grid-movement', // Grid movement plugin
+    'plugins.grid-movement-debug' // Grid movement debug menu
 )
 .defines(function() {
     var MainGame = ig.Game.extend({
