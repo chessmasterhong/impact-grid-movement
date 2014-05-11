@@ -10,7 +10,7 @@ Features
 * Continuous movement
 * Post-collision realignment
 * Map edge auto-detection
-* Togglable grid display mode
+* Togglable grid display mode (via optional debug menu)
 
 
 Basic Usage
@@ -27,7 +27,7 @@ Basic Usage
 
   b. For mouse support add `this.gridMovementBindMouse('click');` in your entity's `update` method.
 
-    * The `'click'` can be changed to fit your game.
+    * The `'click'` argument can be changed to fit your game.
 
     * An optional argument (click distance tolerance) can be added to gridMovementBindMouse. Defaults to tile size if not specified.
 
@@ -37,6 +37,17 @@ Basic Usage
 5. This sets up your game for basic grid movement. Enjoy!
 
 For an example or more information, see the included demo's source code.
+
+
+Debug
+---
+To enable debug, download `grid-movement-debug.js` into your project's plugin directory (for example: `lib/plugins/grid-movement.js`) and add the line `plugins.grid-movement-debug` in the `.requires` section of your main game (for example: `lib/game/main.js`). 
+
+Be sure you have `'impact.debug.menu'` in your main game's `.requires` section as well.
+
+That's it! Now run your game. You will see an extra option called `Grid` in your debug menu. Click on it. Currently there is only one option (`Show grid`, which will display the map's grid based on the grid movement plugin's map size).
+
+* The grid movement debug menu is *optional*. It is not required to enable grid movement.
 
 
 Configuration
